@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+from __future__ import unicode_literals
+
+import sys
+import jedi
+import jedi_gen
+import json
+import argparse
+
+
+def parse_arguments():
+    argv = sys.argv[1:]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('path', type=str, help='model path')
+    parser.add_argument('-o', '--output', type=str, default=None, help='output file')
+
+    args = parser.parse_args(argv)
+    return args
+
+
+def main():
+    args = parse_arguments()
+    model_path = args.path
+
+    js = jedi_gen.generate(model_path)
+
+    if args.output:
+        with open(args.output, 'w') as fl:
+            json.dump(js, fl)
+    else:
+        print(json.dumps(js))
+
+
+if __name__ == '__main__':
+    main()
